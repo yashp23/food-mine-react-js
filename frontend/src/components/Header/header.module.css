@@ -1,15 +1,16 @@
 .header {
   background: white;
   padding: 0;
-  border-bottom: 1px solid #e72929;
+  border-bottom: 1px solid #05580a;
 }
 
 .header a {
-  color: #af1313;
+  color: #05580a;
+  transition: color 0.3s ease-in-out;
 }
 
 .header a:hover {
-  background: #e72929;
+  background: #05580a;;
   color: white;
   cursor: pointer;
 }
@@ -57,7 +58,7 @@
 }
 
 .cart_count {
-  background-color: #ff4d4d;
+  background-color: #05580a;
   color: white;
   padding: 0.1rem 0.45rem;
   border-radius: 100rem;

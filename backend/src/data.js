@@ -85,7 +85,7 @@ export const sample_users = [
     email: 'john@gmail.com',
     password: '12345',
     address: 'Toronto On',
-    isAdmin: false,
+    isAdmin: true,
   },
   {
     id: 2,

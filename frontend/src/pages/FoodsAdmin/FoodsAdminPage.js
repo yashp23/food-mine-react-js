@@ -9,7 +9,7 @@ import Price from '../../components/Price/Price';
 import { toast } from 'react-toastify';
 
 export default function FoodsAdminPage() {
-  const [foods, setFoods] = useState();
+  const [foods, setFoods] = useState([]);
   const { searchTerm } = useParams();
 
   useEffect(() => {
@@ -17,12 +17,18 @@ export default function FoodsAdminPage() {
   }, [searchTerm]);
 
   const loadFoods = async () => {
-    const foods = searchTerm ? await search(searchTerm) : await getAll();
-    setFoods(foods);
+    try {
+      const foods = searchTerm ? await search(searchTerm) : await getAll();
+      console.log('Fetched Foods:', foods); // Debugging line
+      setFoods(foods || []);
+    } catch (error) {
+      console.error('Error loading foods:', error);
+      toast.error('Failed to load foods');
+    }
   };
 
   const FoodsNotFound = () => {
-    if (foods && foods.length > 0) return;
+    if (foods && foods.length > 0) return null;
 
     return searchTerm ? (
       <NotFound linkRoute="/admin/foods" linkText="Show All" />
@@ -35,9 +41,14 @@ export default function FoodsAdminPage() {
     const confirmed = window.confirm(`Delete Food ${food.name}?`);
     if (!confirmed) return;
 
-    await deleteById(food.id);
-    toast.success(`"${food.name}" Has Been Removed!`);
-    setFoods(foods.filter(f => f.id !== food.id));
+    try {
+      await deleteById(food.id);
+      toast.success(`"${food.name}" Has Been Removed!`);
+      setFoods(foods.filter(f => f.id !== food.id));
+    } catch (error) {
+      console.error('Error deleting food:', error);
+      toast.error('Failed to delete food');
+    }
   };
 
   return (
@@ -54,18 +65,17 @@ export default function FoodsAdminPage() {
           Add Food +
         </Link>
         <FoodsNotFound />
-        {foods &&
-          foods.map(food => (
-            <div key={food.id} className={classes.list_item}>
-              <img src={food.imageUrl} alt={food.name} />
-              <Link to={'/food/' + food.id}>{food.name}</Link>
-              <Price price={food.price} />
-              <div className={classes.actions}>
-                <Link to={'/admin/editFood/' + food.id}>Edit</Link>
-                <Link onClick={() => deleteFood(food)}>Delete</Link>
-              </div>
+        {foods.map(food => (
+          <div key={food.id} className={classes.list_item}>
+            <img src={food.imageUrl} alt={food.name} />
+            <Link to={'/food/' + food.id}>{food.name}</Link>
+            <Price price={food.price} />
+            <div className={classes.actions}>
+              <Link to={'/admin/editFood/' + food.id}>Edit</Link>
+              <button onClick={() => deleteFood(food)}>Delete</button> {/* Changed from <Link> */}
             </div>
-          ))}
+          </div>
+        ))}
       </div>
     </div>
   );

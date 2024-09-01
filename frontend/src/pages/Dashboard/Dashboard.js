@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
   const { user } = useAuth();
+  console.log('User:', user); // Debugging line
 
   return (
     <div className={classes.container}>

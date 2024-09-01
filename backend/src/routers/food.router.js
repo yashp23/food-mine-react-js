@@ -8,10 +8,16 @@ const router = Router();
 router.get(
   '/',
   handler(async (req, res) => {
-    const foods = await FoodModel.find({});
-    res.send(foods);
+    try {
+      const foods = await FoodModel.find({});
+      res.send(foods);
+    } catch (error) {
+      console.error('Error fetching foods:', error);
+      res.status(500).send('Internal Server Error');
+    }
   })
 );
+
 
 router.post(
   '/',

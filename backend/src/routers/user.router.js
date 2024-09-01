@@ -57,16 +57,26 @@ router.put(
   '/updateProfile',
   auth,
   handler(async (req, res) => {
-    const { name, address } = req.body;
-    const user = await UserModel.findByIdAndUpdate(
-      req.user.id,
-      { name, address },
-      { new: true }
-    );
+    try {
+      const { name, address } = req.body;
+      const user = await UserModel.findByIdAndUpdate(
+        req.user.id,
+        { name, address },
+        { new: true, runValidators: true } // Ensure validation is run
+      );
 
-    res.send(generateTokenResponse(user));
+      if (!user) {
+        return res.status(404).send({ message: 'User not found' });
+      }
+
+      res.send(generateTokenResponse(user));
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      res.status(500).send({ message: 'Server error' });
+    }
   })
 );
+
 
 router.put(
   '/changePassword',

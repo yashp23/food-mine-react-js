@@ -48,15 +48,20 @@ router.put(
   })
 );
 
+import mongoose from 'mongoose';
+
 router.get(
   '/track/:orderId',
   handler(async (req, res) => {
     const { orderId } = req.params;
-    const user = await UserModel.findById(req.user.id);
 
-    const filter = {
-      _id: orderId,
-    };
+    // Validate the orderId
+    if (!mongoose.Types.ObjectId.isValid(orderId)) {
+      return res.status(BAD_REQUEST).send('Invalid Order ID');
+    }
+
+    const user = await UserModel.findById(req.user.id);
+    const filter = { _id: orderId };
 
     if (!user.isAdmin) {
       filter.user = user._id;
@@ -64,11 +69,15 @@ router.get(
 
     const order = await OrderModel.findOne(filter);
 
-    if (!order) return res.send(UNAUTHORIZED);
+    if (!order) {
+      return res.status(UNAUTHORIZED).send('Order not found or unauthorized');
+    }
 
     return res.send(order);
   })
 );
+
+
 
 router.get(
   '/newOrderForCurrentUser',
