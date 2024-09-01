@@ -4,7 +4,7 @@
   "description": "## 1. Demo And Installation",
   "main": "index.js",
   "scripts": {
-    "start": "cd backend && npm start",
+    "start": "concurrently \"cd backend && npm start\" \"cd frontend && npm start\"",
     "prebuild": "cd backend && npm install & cd frontend && npm install",
     "build": "cd frontend && npm run build",
     "postbuild": "mv -f frontend/build backend/src/public"
@@ -17,5 +17,8 @@
   },
   "dependencies": {
     "mongoose": "^8.6.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
