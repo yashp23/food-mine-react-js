@@ -33,7 +33,7 @@ export default function Dashboard() {
 const allItems = [
   {
     title: 'Orders',
-    imageUrl: '/icons/orders.svg',
+    imageUrl: './icons/orders.svg',
     url: '/orders',
     bgColor: '#ec407a',
     color: 'white',
