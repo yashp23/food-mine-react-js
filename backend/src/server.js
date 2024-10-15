@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: ['https://food-mine-react-js-usa1.vercel.app/'],
+    origin: ['https://food-mine-react-js-4e3z.vercel.app/'],
   })
 );
 
